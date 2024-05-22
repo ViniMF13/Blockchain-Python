@@ -6,7 +6,7 @@ import time
 class Blockchain:
     def __init__(self):
         self.chain = [self.create_genesis_block()]
-        self.difficulty = 2
+        self.difficulty = 4
         self.pending_transactions = []
         self.mining_reward = 50
 
@@ -24,7 +24,7 @@ class Blockchain:
         self.chain.append(block)
 
         self.pending_transactions = [
-            Transaction(None, mining_reward_address, self.mining_reward)
+            Transaction('Blockchain', mining_reward_address, self.mining_reward)
         ]
 
     def create_transaction(self, transaction):
