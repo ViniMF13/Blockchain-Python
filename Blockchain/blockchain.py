@@ -17,6 +17,7 @@ class Blockchain:
         return self.chain[-1]
 
     def mine_pending_transactions(self, mining_reward_address):
+        valid_transactions = [tx for tx in self.pending_transactions if tx.is_valid()]
         block = Block(len(self.chain), self.get_latest_block().hash, self.pending_transactions)
         block.mine_block(self.difficulty)
 
@@ -28,6 +29,8 @@ class Blockchain:
         ]
 
     def create_transaction(self, transaction):
+        if not transaction.is_valid():
+            raise ValueError("Cannot add invalid transaction to chain")
         self.pending_transactions.append(transaction)
 
     def get_balance_of_address(self, address):
