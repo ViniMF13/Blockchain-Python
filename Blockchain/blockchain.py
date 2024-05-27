@@ -1,4 +1,4 @@
-# blockchain/blockchain.py
+# Blockchain/blockchain.py
 from .block import Block
 from .transaction import Transaction
 import time
@@ -18,7 +18,7 @@ class Blockchain:
 
     def mine_pending_transactions(self, mining_reward_address):
         valid_transactions = [tx for tx in self.pending_transactions if tx.is_valid()]
-        block = Block(len(self.chain), self.get_latest_block().hash, self.pending_transactions)
+        block = Block(len(self.chain), self.get_latest_block().hash, valid_transactions)
         block.mine_block(self.difficulty)
 
         print("Block successfully mined!")
@@ -53,4 +53,7 @@ class Blockchain:
                 return False
             if current_block.previous_hash != previous_block.hash:
                 return False
+            for transaction in current_block.transactions:
+                if not transaction.is_valid():
+                    return False
         return True

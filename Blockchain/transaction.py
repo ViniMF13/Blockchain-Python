@@ -1,6 +1,6 @@
 import hashlib
+import json
 import ecdsa
-import _json
 
 class Transaction:
     def __init__(self, sender, receiver, amount):
@@ -10,30 +10,23 @@ class Transaction:
         self.signature = None
 
     def calculate_hash(self):
-        transaction_string = f"{self.sender}{self.receiver}{self.amount}"
-        return hashlib.sha256(transaction_string.encode()).hexdigest()
+        transaction_data = f'{self.sender}{self.receiver}{self.amount}'
+        return hashlib.sha256(transaction_data.encode()).hexdigest()
 
-    def sign_transaction(self, private_key):
-        if not self.sender or not self.receiver:
-            raise ValueError("Transaction must include sender and receiver")
-        
-        if private_key.to_string().hex() != self.sender:
-            raise ValueError("You cannot sign transactions for other wallets")
-
-        hash_tx = self.calculate_hash()
-        sk = ecdsa.SigningKey.from_string(bytes.fromhex(private_key.to_string().hex()), curve=ecdsa.SECP256k1)
-        self.signature = sk.sign(hash_tx.encode()).hex()
+    def sign_transaction(self, signing_key):
+        if signing_key.get_verifying_key().to_string().hex() != self.sender:
+            raise ValueError("You cannot sign transactions for other wallets!")
+        transaction_hash = self.calculate_hash().encode()
+        self.signature = signing_key.sign(transaction_hash).hex()
 
     def is_valid(self):
-        if self.sender is None:  # Mining reward transaction
+        if self.sender is None:  # Reward transaction
             return True
-        if self.signature is None:
+        if not self.signature:
             raise ValueError("No signature in this transaction")
         vk = ecdsa.VerifyingKey.from_string(bytes.fromhex(self.sender), curve=ecdsa.SECP256k1)
-        try:
-            return vk.verify(bytes.fromhex(self.signature), self.calculate_hash().encode())
-        except ecdsa.BadSignatureError:
-            return False
+        transaction_hash = self.calculate_hash().encode()
+        return vk.verify(bytes.fromhex(self.signature), transaction_hash)
 
     def __str__(self):
-        return f"Transaction(sender={self.sender}, receiver={self.receiver}, amount={self.amount}, signature={self.signature})"
+        return f'Transaction({self.sender} -> {self.receiver}, Amount: {self.amount}, Signature: {self.signature})'
