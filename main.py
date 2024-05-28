@@ -1,6 +1,7 @@
 from Blockchain.blockchain import Blockchain
 from Blockchain.transaction import Transaction
 from Blockchain.wallet import Wallet
+from Blockchain import database
 
 def main():
     # Criação de carteiras
@@ -19,6 +20,7 @@ def main():
     
     # Adiciona transação na blockchain
     my_blockchain.create_transaction(tx1)
+    database.insert_transaction(tx1)
     
     # Mineração de transações pendentes
     my_blockchain.mine_pending_transactions(wallet_A.get_address())
