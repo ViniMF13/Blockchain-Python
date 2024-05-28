@@ -1,6 +1,7 @@
 # blockchain/block.py
 import hashlib
 import time
+import json
 
 class Block:
     def __init__(self, index, previous_hash, transactions, timestamp=None):
@@ -12,7 +13,8 @@ class Block:
         self.hash = self.calculate_hash()
 
     def calculate_hash(self):
-        block_string = f"{self.index}{self.previous_hash}{self.transactions}{self.timestamp}{self.nonce}"
+        transactions_string = json.dumps([str(tx) for tx in self.transactions], sort_keys=True)
+        block_string = f"{self.index}{self.previous_hash}{transactions_string}{self.timestamp}{self.nonce}"
         return hashlib.sha256(block_string.encode()).hexdigest()
 
     def mine_block(self, difficulty):
