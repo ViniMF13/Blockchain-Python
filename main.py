@@ -2,10 +2,27 @@ from Blockchain.blockchain import Blockchain
 from Blockchain.transaction import Transaction
 from Blockchain.wallet import Wallet
 from Blockchain import database
+import user
+
 
 def main():
     # Criação de carteiras
-    wallet_A = Wallet()
+
+    #email = input('Digite o email:')
+    #senha = input('Digite a senha: ')
+    email = 'newuser@example.com'
+    senha = 'new_password'
+    logged = database.login_user(email, senha)
+
+    while logged == False:
+        print('\nCredenciais incorretas\ntente novamente.')
+        email = input('Digite o email:')
+        senha = input('Digite a senha: ')
+        logged = database.login_user(email, senha)
+
+    usuario = user.User(email, senha, 'nome_consultado')    
+    
+    wallet_A = usuario.wallet
     wallet_B = Wallet()
     
     print("Carteira A:", wallet_A)
@@ -31,6 +48,7 @@ def main():
     
     # Validar blockchain
     print("Blockchain é válida?", my_blockchain.is_chain_valid())
+
 
 if __name__ == "__main__":
     main()

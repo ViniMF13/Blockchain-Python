@@ -2,6 +2,7 @@ import os
 import psycopg2
 from psycopg2 import sql
 from dotenv import load_dotenv
+import bcrypt
 
 # Carregar variáveis de ambiente do arquivo .env
 load_dotenv()
@@ -12,6 +13,64 @@ DATABASE_URL = 'postgresql://postgres:aQQFdueQgyhrdDJSxeUgdxNiipLChEqD@monorail.
 def connect_to_db():
     """Estabelece uma conexão com o banco de dados."""
     return psycopg2.connect(DATABASE_URL)
+
+#=================== USER ========================================
+
+def create_user_tbl():
+    """Cria a tabela de usuários se ela não existir."""
+    conn = connect_to_db()
+    cursor = conn.cursor()
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS user_tbl (
+        email VARCHAR(255) NOT NULL UNIQUE,
+        nome VARCHAR(255) NOT NULL,
+        senha VARCHAR(255) NOT NULL
+    )
+    ''')
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+def insert_user(user):
+    """Insere um novo usuário na tabela."""
+    conn = connect_to_db()
+    cursor = conn.cursor()
+    cursor.execute('''
+    INSERT INTO user_tbl (email, nome, senha) VALUES (%s, %s, %s)
+    ''', (user.email, user.nome, user.get_senha()))
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+def query_user_by_email(email):
+    """Consulta um usuário pelo email na tabela user_tbl."""
+    conn = connect_to_db()
+    cursor = conn.cursor()
+    cursor.execute('SELECT email, nome, senha FROM user_tbl WHERE email = %s', (email,))
+    user = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    return user
+
+
+def login_user(email, senha):
+    """Valida as credenciais de login de um usuário."""
+    conn = connect_to_db()
+    cursor = conn.cursor()
+    cursor.execute('SELECT email, nome, senha FROM user_tbl WHERE email = %s', (email,))
+    user_record = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    
+    if user_record:
+        stored_email, stored_nome, stored_senha = user_record
+        if bcrypt.checkpw(senha.encode('utf-8'), stored_senha.encode('utf-8')):
+            return True, f"Bem-vindo, {stored_nome}!"
+    return False
+
+
+
+#================= TRANSACTION ===================================
 
 def create_transaction_tbl():
     """Cria a tabela de usuários se ela não existir."""
@@ -67,3 +126,4 @@ def delete_row(table_name, campo, id):
     finally:
         cursor.close()
         conn.close()
+
