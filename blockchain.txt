@@ -1,0 +1,10 @@
+======================== Bloco 0 ========================
+index: 0
+previous_hash: 0
+transactions: []
+timestamp: 1718126692.9170113
+======================== Bloco 1 ========================
+index: 1
+previous_hash: fcb53eca43b84e0b3b2524e7d66130f9a3ff15e78c8b686611d35d1870f567dc
+transactions: [<Blockchain.transaction.Transaction object at 0x00000242429082D0>]
+timestamp: 1718126694.7485404

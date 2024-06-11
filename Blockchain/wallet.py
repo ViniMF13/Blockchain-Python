@@ -1,7 +1,7 @@
 import os
 import hashlib
 import ecdsa
-import base58
+#import base58
 
 class Wallet:
     def __init__(self):

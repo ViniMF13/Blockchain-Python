@@ -4,20 +4,26 @@ from Blockchain.wallet import Wallet
 from Blockchain import database
 
 def main():
+    i = 0
+
+    # Criação de blockchain
+    my_blockchain = Blockchain()
+    with open('blockchain.txt', 'a') as file:
+        file.write(f'======================== Bloco {i} ========================\n')
+        file.write(f'index: {my_blockchain.get_latest_block().index}\nprevious_hash: {my_blockchain.get_latest_block().previous_hash}\ntransactions: {my_blockchain.get_latest_block().transactions}\ntimestamp: {my_blockchain.get_latest_block().timestamp}\n')
+
+    
     while(1):
+        i = i + 1
         # Criação de carteiras
         wallet_A = Wallet()
         wallet_B = Wallet()
-        
-        print("Carteira A:", wallet_A)
+
+        print("\nCarteira A:", wallet_A)
         print("Carteira B:", wallet_B)
         
-        # Criação de blockchain
-        my_blockchain = Blockchain()
-        
-        
         # Criação de transação
-        tx1 = Transaction(wallet_A.get_address(), wallet_B.get_address(), 10)
+        tx1 = Transaction(wallet_A.get_public_key(), wallet_A.get_address(), wallet_B.get_address(), 10)
         wallet_A.sign_transaction(tx1)
         
         # Adiciona transação na blockchain
@@ -34,12 +40,16 @@ def main():
         # Validar blockchain
         print("Blockchain é válida?", my_blockchain.is_chain_valid())
 
+        ####################### ADICIONAR AO ARQUIVO TXT ############################################
 
-        stop = input('Deseja parar? ')
-        if stop == 's':
+        with open('blockchain.txt', 'a') as file:
+            file.write(f'======================== Bloco {i} ========================\n')
+            file.write(f'index: {my_blockchain.get_latest_block().index}\nprevious_hash: {my_blockchain.get_latest_block().previous_hash}\ntransactions: {my_blockchain.get_latest_block().transactions}\ntimestamp: {my_blockchain.get_latest_block().timestamp}\n')
+
+        print('\n')
+        stop = input('DESEJA PARAR?')
+        if stop == 's': 
             break
-
-    
 
 
 if __name__ == "__main__":
