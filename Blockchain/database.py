@@ -67,3 +67,5 @@ def delete_row(table_name, campo, id):
     finally:
         cursor.close()
         conn.close()
+
+drop_table('user_tbl')
