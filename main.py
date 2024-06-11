@@ -4,17 +4,22 @@ from Blockchain.wallet import Wallet
 from Blockchain import database
 
 def main():
-    i = 0
-
-    # Criação de blockchain
+    # Criação da blockchain
     my_blockchain = Blockchain()
-    with open('blockchain.txt', 'a') as file:
-        file.write(f'======================== Bloco {i} ========================\n')
-        file.write(f'index: {my_blockchain.get_latest_block().index}\nprevious_hash: {my_blockchain.get_latest_block().previous_hash}\ntransactions: {my_blockchain.get_latest_block().transactions}\ntimestamp: {my_blockchain.get_latest_block().timestamp}\n')
 
-    
     while(1):
-        i = i + 1
+        i = my_blockchain.get_latest_block().index
+        with open('blockchain.txt', 'a') as file:
+            file.write(f'======================== Bloco {i} ========================\n')
+            file.write(f'index: {my_blockchain.get_latest_block().index}\n')
+            file.write(f'previous_hash: {my_blockchain.get_latest_block().previous_hash}\n')
+            file.write(f'transactions: {my_blockchain.get_latest_block().transactions}\n')
+            file.write(f'timestamp: {my_blockchain.get_latest_block().timestamp}\n')
+
+        stop = input(' Deseja simular transação?')
+        if stop == 'n':
+            break
+
         # Criação de carteiras
         wallet_A = Wallet()
         wallet_B = Wallet()
@@ -39,17 +44,6 @@ def main():
         
         # Validar blockchain
         print("Blockchain é válida?", my_blockchain.is_chain_valid())
-
-        ####################### ADICIONAR AO ARQUIVO TXT ############################################
-
-        with open('blockchain.txt', 'a') as file:
-            file.write(f'======================== Bloco {i} ========================\n')
-            file.write(f'index: {my_blockchain.get_latest_block().index}\nprevious_hash: {my_blockchain.get_latest_block().previous_hash}\ntransactions: {my_blockchain.get_latest_block().transactions}\ntimestamp: {my_blockchain.get_latest_block().timestamp}\n')
-
-        print('\n')
-        stop = input('DESEJA PARAR?')
-        if stop == 's': 
-            break
 
 
 if __name__ == "__main__":

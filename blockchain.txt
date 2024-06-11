@@ -2,9 +2,14 @@
 index: 0
 previous_hash: 0
 transactions: []
-timestamp: 1718126692.9170113
+timestamp: 1718127797.082273
 ======================== Bloco 1 ========================
 index: 1
-previous_hash: fcb53eca43b84e0b3b2524e7d66130f9a3ff15e78c8b686611d35d1870f567dc
-transactions: [<Blockchain.transaction.Transaction object at 0x00000242429082D0>]
-timestamp: 1718126694.7485404
+previous_hash: 7bded7207bb997ec67d464424b3877f6b3d250c195ccd219fc6d248775cbd25b
+transactions: [<Blockchain.transaction.Transaction object at 0x000001BD92569410>]
+timestamp: 1718127805.2744374
+======================== Bloco 2 ========================
+index: 2
+previous_hash: 000052b05b718a5a2645bfc2ffedc32c056849a2447426254ea84b6323b66f24
+transactions: [<Blockchain.transaction.Transaction object at 0x000001BD928B6B90>, <Blockchain.transaction.Transaction object at 0x000001BD9283F810>]
+timestamp: 1718127831.3583696
