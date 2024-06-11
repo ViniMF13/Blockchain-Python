@@ -25,7 +25,7 @@ class Blockchain:
         self.chain.append(block)
 
         self.pending_transactions = [
-            Transaction('Blockchain', mining_reward_address, self.mining_reward)
+            Transaction(None, 'Blockchain', mining_reward_address, self.mining_reward)
         ]
 
     def create_transaction(self, transaction):
