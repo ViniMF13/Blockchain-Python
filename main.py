@@ -7,22 +7,17 @@ def main():
     # Criação da blockchain
     my_blockchain = Blockchain()
 
-    while(1):
-        i = my_blockchain.get_latest_block().index
-        with open('blockchain.txt', 'a') as file:
-            file.write(f'======================== Bloco {i} ========================\n')
-            file.write(f'index: {my_blockchain.get_latest_block().index}\n')
-            file.write(f'previous_hash: {my_blockchain.get_latest_block().previous_hash}\n')
-            file.write(f'transactions: {my_blockchain.get_latest_block().transactions}\n')
-            file.write(f'timestamp: {my_blockchain.get_latest_block().timestamp}\n')
+    # Adiciona bloco genesis ao arquivo txt
+    my_blockchain.atualiza_arquivo('blockchain.txt')
 
-        stop = input(' Deseja simular transação?')
-        if stop == 'n':
+    # Criação de carteira
+    wallet_A = Wallet()
+    wallet_B = Wallet()
+
+    while True:
+        start = input('Deseja simular transação?')
+        if start == 'n':
             break
-
-        # Criação de carteiras
-        wallet_A = Wallet()
-        wallet_B = Wallet()
 
         print("\nCarteira A:", wallet_A)
         print("Carteira B:", wallet_B)
@@ -33,18 +28,18 @@ def main():
         
         # Adiciona transação na blockchain
         my_blockchain.create_transaction(tx1)
-        database.insert_transaction(tx1)
         
-        # Mineração de transações pendentes
-        my_blockchain.mine_pending_transactions(wallet_A.get_address())
         
-        # Mostrar saldo de carteiras
-        print(f"Saldo da carteira A: {my_blockchain.get_balance_of_address(wallet_A.get_address())}")
-        print(f"Saldo da carteira B: {my_blockchain.get_balance_of_address(wallet_B.get_address())}")
-        
-        # Validar blockchain
-        print("Blockchain é válida?", my_blockchain.is_chain_valid())
+    # Mineração de transações pendentes
+    my_blockchain.mine_pending_transactions(wallet_A.get_address())
+    my_blockchain.atualiza_arquivo('blockchain.txt')
 
+    # Mostrar saldo de carteiras
+    print(f"Saldo da carteira A: {my_blockchain.get_balance_of_address(wallet_A.get_address())}")
+    print(f"Saldo da carteira B: {my_blockchain.get_balance_of_address(wallet_B.get_address())}")
+
+    # Validar blockchain
+    print("\nBlockchain é válida?", my_blockchain.is_chain_valid())
 
 if __name__ == "__main__":
     main()

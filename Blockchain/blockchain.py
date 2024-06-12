@@ -57,3 +57,18 @@ class Blockchain:
                 if not transaction.is_valid():
                     return False
         return True
+    
+    def atualiza_arquivo(self, file_name):
+        with open(file_name, 'a') as file:
+            file.write(f'======================== Bloco {self.get_latest_block().index} ========================\n')
+            file.write(f'index: {self.get_latest_block().index}\n')
+            file.write(f'previous_hash: {self.get_latest_block().previous_hash}\n')
+            file.write(f'transactions: {len(self.get_latest_block().transactions)}\n')
+
+            for i in range (len(self.get_latest_block().transactions)):
+                file.write(f'\tsenderPublicKey: {self.get_latest_block().transactions[i].senderPublicKey}\n')
+                file.write(f'\tsender: {self.get_latest_block().transactions[i].sender}\n')
+                file.write(f'\treceiver: {self.get_latest_block().transactions[i].receiver}\n')
+                file.write(f'\tamount: {self.get_latest_block().transactions[i].amount}\n')
+                file.write(f'\tsignature: {self.get_latest_block().transactions[i].signature}\n')
+            file.write(f'timestamp: {self.get_latest_block().timestamp}\n')
