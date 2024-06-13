@@ -9,9 +9,9 @@ class Transaction:
         self.signature = None
 
     def calculate_hash(self):
-        transaction_data = f'{self.sender}{self.receiver}{self.amount
+        transaction_data = f'{self.sender}{self.receiver}{self.amount}'
         return hashlib.sha256(transaction_data.encode()).hexdigest()
     
     def __str__(self):
-        return f'\nSender:{self.sender} \nsender Public Key{self.senderPublicKey} \nReceiver: {self.receiver}\n Amount: {self.amount} \nSignature: {self.signature})'
+        return f'\nSender: {self.sender} \nsender Public Key{self.senderPublicKey} \nReceiver: {self.receiver}\n Amount: {self.amount} \nSignature: {self.signature}'
 
