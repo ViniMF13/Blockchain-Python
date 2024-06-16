@@ -41,15 +41,12 @@ class Node():
     
     def mine_pending_transactions(self, mining_reward_address):
         valid_transactions = [tx for tx in self.blockchain.pending_transactions if self.is_valid(tx)]
+        valid_transactions.append(Transaction(None, 'Blockchain', mining_reward_address, self.blockchain.mining_reward))
         block = Block(len(self.blockchain.chain), self.blockchain.get_latest_block().hash, valid_transactions)
         block.mine_block(self.blockchain.difficulty)
 
-        print("Block successfully mined! Rewards received: ", self.blockchain.mining_reward)
         self.blockchain.chain.append(block)
-
-        self.blockchain.pending_transactions = [
-            Transaction(None, 'Blockchain', mining_reward_address, self.blockchain.mining_reward)
-        ]
+        self.blockchain.pending_transactions = []
 
     def is_chain_valid(self):
         for i in range(1, len(self.blockchain.chain)):
