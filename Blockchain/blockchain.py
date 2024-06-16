@@ -12,6 +12,9 @@ class Blockchain:
 
     def create_genesis_block(self):
         return Block(0, "0", [], time.time())
+    
+    def receive_airdrop(self, address):        
+        self.pending_transactions.append(Transaction(None, 'Blockchain', address, 1000))
 
     def get_latest_block(self):
         return self.chain[-1]
@@ -28,22 +31,4 @@ class Blockchain:
         return balance
 
 
-    def update_file(self, file_name):
-        with open(file_name, 'a') as file:
-            file.write(f'======================== Bloco {self.get_latest_block().index} ========================\n')
-            file.write(f'index: {self.get_latest_block().index}\n')
-            file.write(f'previous_hash: {self.get_latest_block().previous_hash}\n')
-            file.write(f'transactions: {len(self.get_latest_block().transactions)}\n')
-            for i in range (len(self.get_latest_block().transactions)):
-                file.write(f'\tsenderPublicKey: {self.get_latest_block().transactions[i].senderPublicKey}\n')
-                file.write(f'\tsender: {self.get_latest_block().transactions[i].sender}\n')
-                file.write(f'\treceiver: {self.get_latest_block().transactions[i].receiver}\n')
-                file.write(f'\tamount: {self.get_latest_block().transactions[i].amount}\n')
-                file.write(f'\tsignature: {self.get_latest_block().transactions[i].signature}\n')
-            file.write(f'timestamp: {self.get_latest_block().timestamp}\n')
-            file.write(f'nonce: {self.get_latest_block().nonce}\n')
-            file.write(f'hash: {self.get_latest_block().hash}\n')
-
-
-            
-            
+    
