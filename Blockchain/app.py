@@ -10,7 +10,10 @@ class BlockchainApp:
         self.root = root
         self.root.title("Blockchain")
         self.root.geometry("600x400")
+
         self.blockchain = Blockchain()
+        self.blockchain.load_from_file('blockchain.json')
+
         self.node = Node(self.blockchain)
         self.wallet = None
         
@@ -28,6 +31,8 @@ class BlockchainApp:
     def create_wallet(self):
         self.wallet = Wallet(self.blockchain)
         #messagebox.showinfo("Wallet Created", f"Your new wallet address: {self.wallet.get_address()}")
+        print(f'your seed-phras: {self.wallet.seed_phrase}\n')
+        print(f'your addres: {self.swallet.get_address()}\n')
         self.blockchain.receive_airdrop(self.wallet.get_address())
         messagebox.showinfo("Airdrop Received", "you received 1000 POO. Mine the last block to update balance")
 
@@ -38,13 +43,15 @@ class BlockchainApp:
         if seed_phrase:
             self.wallet = Wallet(self.blockchain, seed_phrase=seed_phrase)
             #messagebox.showinfo("Wallet Recovered", f"address: {self.wallet.get_address()}")
+            print(self.wallet.seed_phrase)
+            print(self.wallet.get_address())
             self.wallet_menu()
 
     def wallet_menu(self):
         self.clear_window()
-
+        
         tk.Label(self.root, text=f"Address: {self.wallet.get_address()}", font=("Arial", 12, "bold")).pack(pady=5)
-        tk.Button(self.root, text="copy address", command=self.copy(self.wallet.get_address())).pack(pady=10)
+        
         tk.Label(self.root, text=f"Balance: {self.blockchain.get_balance_of_address(self.wallet.get_address())}").pack(pady=15)
         
         tk.Button(self.root, text="Send Transaction", command=self.send_transaction).pack(pady=10)
@@ -75,6 +82,7 @@ class BlockchainApp:
             try:
                 amount = float(amount_entry.get())
                 if self.blockchain.get_balance_of_address(self.wallet.get_address()) >= amount:
+                    print("public key", self.wallet.public_key)
                     transaction = Transaction(self.wallet.public_key, self.wallet.get_address(), receiver, amount)
                     self.wallet.sign_transaction(transaction)
                     self.blockchain.pending_transactions.append(transaction)
@@ -113,7 +121,7 @@ class BlockchainApp:
 
     def on_closing(self):
         # Save the blockchain data to a file
-        self.blockchain.update_file('blockchain.txt')
+        self.blockchain.update_file('blockchain.json')
         self.root.destroy()        
 
 if __name__ == "__main__":

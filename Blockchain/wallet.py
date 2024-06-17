@@ -16,7 +16,6 @@ class Wallet:
         else:
             self.seed_phrase = self.mnemonic.generate()
             self.seed = self.mnemonic.to_seed(self.seed_phrase)
-            print(f'your seed-phras: {self.seed_phrase}\n')
 
         self.blockchain = blockchain    
         self.__private_key = self.__generate_private_key()
