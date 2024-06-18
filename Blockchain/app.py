@@ -32,7 +32,7 @@ class BlockchainApp:
         self.wallet = Wallet(self.blockchain)
         #messagebox.showinfo("Wallet Created", f"Your new wallet address: {self.wallet.get_address()}")
         print(f'your seed-phras: {self.wallet.seed_phrase}\n')
-        print(f'your addres: {self.swallet.get_address()}\n')
+        print(f'your addres: {self.wallet.get_address()}\n')
         self.blockchain.receive_airdrop(self.wallet.get_address())
         messagebox.showinfo("Airdrop Received", "you received 1000 POO. Mine the last block to update balance")
 
@@ -47,6 +47,41 @@ class BlockchainApp:
             print(self.wallet.get_address())
             self.wallet_menu()
 
+    def blockScan(self):
+        self.clear_window()  # Clear the current window
+
+        # Create a Text widget with a Scrollbar
+        text_frame = tk.Frame(self.root)
+        text_frame.pack(fill=tk.BOTH, expand=True)
+
+        text_area = tk.Text(text_frame, wrap=tk.WORD)
+        scrollbar = tk.Scrollbar(text_frame, command=text_area.yview)
+        text_area.config(yscrollcommand=scrollbar.set)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        text_area.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+        # Fetch the blocks from the blockchain
+        blocks = self.blockchain.chain  # Assuming `chain` is a list of blocks in your Blockchain class
+
+        # Format and display the blocks
+        for block in blocks:
+            block_text = f"Block #{block.index}\n"
+            block_text += f"Timestamp: {block.timestamp}\n"
+            block_text += f"Previous Hash: {block.previous_hash}\n"
+            block_text += f"Hash: {block.hash}\n"
+            block_text += f"Transactions: {len(block.transactions)}\n"
+            for tx in block.transactions:
+                block_text += f"  Sender: {tx.sender}\n"
+                block_text += f"  Receiver: {tx.receiver}\n"
+                block_text += f"  Amount: {tx.amount}\n"
+                block_text += "-" * 40 + "\n"
+            block_text += "=" * 50 + "\n\n"
+            text_area.insert(tk.END, block_text)
+
+        # Add a button to go back to the main menu
+        tk.Button(self.root, text="Back to Main Menu", command=self.main_menu).pack(pady=10)
+
+
     def wallet_menu(self):
         self.clear_window()
         
@@ -57,8 +92,8 @@ class BlockchainApp:
         tk.Button(self.root, text="Send Transaction", command=self.send_transaction).pack(pady=10)
         tk.Button(self.root, text="Mine Block", command=self.mine_block).pack(pady=10)
         tk.Button(self.root, text="Show Seed", command=self.show_seed).pack(pady=10)
+        tk.Button(self.root, text="BlockScam", command=self.blockScan).pack(pady=10)
         tk.Button(self.root, text="LogOut", command=self.main_menu).pack(pady=10)
-
 
     def copy(self, message):
         self.root.clipboard_clear()
