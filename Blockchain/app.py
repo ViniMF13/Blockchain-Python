@@ -26,7 +26,7 @@ class BlockchainApp:
         self.clear_window()
         
         tk.Button(self.root, text="Create New Wallet", command=self.create_wallet).pack(pady=10)
-        tk.Button(self.root, text="Recover Wallet", command=self.recover_wallet).pack(pady=10)
+        tk.Button(self.root, text="Recover Wallet", command= self.recover_wallet).pack(pady=10)
 
     def create_wallet(self):
         self.wallet = Wallet(self.blockchain)
@@ -46,12 +46,14 @@ class BlockchainApp:
             print(self.wallet.seed_phrase)
             print(self.wallet.get_address())
             self.wallet_menu()
-
+    
     def blockScan(self):
-        self.clear_window()  # Clear the current window
+        # Create a new window for block scan
+        block_window = tk.Toplevel(self.root)
+        block_window.title("Block Scan")
 
-        # Create a Text widget with a Scrollbar
-        text_frame = tk.Frame(self.root)
+        # Create a Text widget with a Scrollbar in the new window
+        text_frame = tk.Frame(block_window)
         text_frame.pack(fill=tk.BOTH, expand=True)
 
         text_area = tk.Text(text_frame, wrap=tk.WORD)
@@ -78,9 +80,8 @@ class BlockchainApp:
             block_text += "=" * 50 + "\n\n"
             text_area.insert(tk.END, block_text)
 
-        # Add a button to go back to the main menu
-        tk.Button(self.root, text="Back to Main Menu", command=self.main_menu).pack(pady=10)
-
+        # Run the new window's main loop
+        block_window.mainloop()
 
     def wallet_menu(self):
         self.clear_window()
@@ -147,7 +148,7 @@ class BlockchainApp:
         tk.Label(seed_window, text="SEED-PHRASE:").pack(pady=5)
         tk.Label(seed_window, text={self.wallet.seed_phrase}).pack(pady=5)
         tk.Label(seed_window, text="THIS IS THE ONLY WAY TO RECOVERY YOUR WALLET!!! KEEP IT SAFE").pack(pady=5)
-        tk.Button(seed_window, text="copy seed-phrase", command=self.copy(self.wallet.seed_phrase)).pack(pady=5)
+        tk.Button(seed_window, text="copy seed-phrase", command=lambda: self.copy(self.wallet.seed_phrase)).pack(pady=5)
         
    
     def clear_window(self):
